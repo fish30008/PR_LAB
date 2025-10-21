@@ -7,4 +7,3 @@ COPY client.py /app/client.py
 
 ENV PYTHONUNBUFFERED=1
 
-ENTRYPOINT ["python", "client.py"]

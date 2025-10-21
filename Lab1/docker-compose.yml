@@ -1,23 +1,72 @@
-version: "3.9"
+#services:
+#  server:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.server
+#    ports:
+#      - "1337:1337"
+#    networks:
+#      - testnet
+#    volumes:
+#      - ./content:/app/content
+#      - ./downloads:/app/downloads
+#    container_name: mini_server
+
+#  client:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.test_client
+#    depends_on:
+#      - server
+#    volumes:
+#      - ./downloads:/app/downloads
+#    container_name: mini_client
+
+
+
 
 services:
   server:
     build:
       context: .
       dockerfile: Dockerfile.server
+    container_name: mini_server
     ports:
       - "1337:1337"
+    networks:
+      - testnet
     volumes:
       - ./content:/app/content
       - ./downloads:/app/downloads
-    container_name: mini_server
 
-  client:
+  spammer:
     build:
       context: .
-      dockerfile: Dockerfile.client
+      dockerfile: Dockerfile.test_client
+    container_name: spammer
     depends_on:
       - server
-    volumes:
-      - ./downloads:/app/downloads
-    container_name: mini_client
+    networks:
+      - spamnet
+      - testnet
+    command: ["python", "test_client.py", "spam"]
+
+  gentle:
+    build:
+      context: .
+      dockerfile: Dockerfile.test_client
+    container_name: gentle
+    depends_on:
+      - server
+    networks:
+      - gentlenet
+      - testnet
+    command: ["python", "test_client.py", "gentle"]
+
+networks:
+  testnet:
+    driver: bridge
+  spamnet:
+    driver: bridge
+  gentlenet:
+    driver: bridge

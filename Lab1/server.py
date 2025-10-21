@@ -9,6 +9,7 @@ CONTENT_DIR = os.path.abspath('.')  # always serve from current working dir
 
 # Prepare a socket
 serverPort = 1337
+serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) ## to reuse opened sockets because they may stay open and i receive shit
 serverSocket.bind(('', serverPort))
 serverSocket.listen(2)
 print(f"Server is listening on port {serverPort}, Serving: {os.path.abspath(CONTENT_DIR)}")
@@ -63,15 +64,6 @@ while True:
             continue
 
         filename = message.split()[1]
-
-        # Serve base directory on root request
-        # if filename == '/':
-        #     body = generate_directory_listing(CONTENT_DIR, '/')
-        #     header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
-        #     connectionSocket.send(header.encode() + body.encode())
-        #     connectionSocket.close()
-        #     continue
-
         if filename == '/':
             dir_to_list = CONTENT_DIR
         else:

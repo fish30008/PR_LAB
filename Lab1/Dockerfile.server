@@ -2,10 +2,10 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY server.py /app/server.py
+COPY server_v2.py /app/server_v2.py
 COPY content /app/content
 
 EXPOSE 1337
 ENV PYTHONUNBUFFERED=1
 
-CMD ["python", "server.py"]
+CMD ["python", "server_v2.py"]
